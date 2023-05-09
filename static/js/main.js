@@ -48,11 +48,15 @@ var app = new Vue({
                 $("#cup-modal").modal('show')
             })
         },
+        show_popup() {
+            $("#cup-modal").modal('show')
+        },
         load_cup(league_id, cup_id) {
             this.league_id = league_id
             this.cup_id = cup_id
             $("#cup-modal").modal('hide')
             this.loading = true
+            this.ready = false
             fetch_cup_info(league_id, cup_id).then((d) => {
                 app.cup_info = d.body
                 app.loading = false
