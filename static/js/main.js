@@ -44,7 +44,7 @@ var app = new Vue({
             app.loading = true
             fetch_player_info().then((d) => {
                 app.loading = false
-                app.cup_list = d.body.leagues.classic.filter(i => i.has_cup)
+                app.cup_list = d.body.leagues.classic.filter(i => i.has_cup && i.cup_league)
                 $("#cup-modal").modal('show')
             })
         },
