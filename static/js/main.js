@@ -307,7 +307,7 @@ function draw_bracket() {
         .style("fill", "black")
         .style("fill-opacity", "0.5")
         .style("font-size", "6pt")
-        .text("v1.1")
+        .text("v1.2")
 
     signature_theme = {
         'fpl': '#37003c',
@@ -432,6 +432,10 @@ function draw_bracket() {
         .style("fill", d => d.winner == null ? "white" : d.winner == d.entry_1_entry ? "white" : "gray")
         .style("font-size", text_size)
         .text(d => app.use_player_names ? d.entry_1_player_name : d.entry_1_name)
+        .style('cursor', 'pointer')
+        .on('click', (d,e) => { 
+            window.open(`https://fantasy.premierleague.com/entry/${e.entry_1_entry}/history`, '_blank')
+        })
 
     single_box
         .append('text')
@@ -443,6 +447,10 @@ function draw_bracket() {
         .style("fill", d => d.winner == null ? "white" : d.winner == d.entry_2_entry ? "white" : "gray")
         .style("font-size", text_size)
         .text(d => app.use_player_names ? d.entry_2_player_name : d.entry_2_name)
+        .style('cursor', 'pointer')
+        .on('click', (d,e) => { 
+            window.open(`https://fantasy.premierleague.com/entry/${e.entry_2_entry}/history`, '_blank')
+        })
 
     single_box
         .append('text')
