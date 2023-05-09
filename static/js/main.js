@@ -307,7 +307,7 @@ function draw_bracket() {
         .style("fill", "black")
         .style("fill-opacity", "0.5")
         .style("font-size", "6pt")
-        .text("v1.0")
+        .text("v1.1")
 
     signature_theme = {
         'fpl': '#37003c',
