@@ -66,12 +66,14 @@ var app = new Vue({
             setTimeout(() => {
                 var node = document.getElementById('draw_area');
                 node.style['transform-origin'] = 'top left'
-                node.style.transform = 'scale(2)'
+                
+                let ratio = 2400 / node.clientWidth
+                node.style.transform = `scale(${ratio})`
                 // node.style.width = '1600px'
                 // node.style['background'] = 'linear-gradient(135deg, #963cfe 0%, #04f0fe 50%)'
                 
                 domtoimage
-                    .toJpeg(node, {'quality': 0.98, 'width': node.clientWidth * 2, 'height': node.clientHeight * 2}, copyDefaultStyles=true)
+                    .toJpeg(node, {'quality': 0.98, 'width': node.clientWidth * ratio, 'height': node.clientHeight * ratio}, copyDefaultStyles=true)
                     .then(function (dataUrl) {
                         var img = new Image();
                         img.src = dataUrl;
