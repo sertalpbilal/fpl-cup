@@ -10,6 +10,7 @@ var app = new Vue({
         loading: false,
         taking_screenshot: false,
         cup_list: undefined,
+        cup_matches: undefined,
         team_id: undefined,
         league_id: undefined,
         cup_id: undefined,
@@ -20,8 +21,13 @@ var app = new Vue({
         earliest: 33
     },
     computed: {
-        demo() {
-            
+        combined_cup_info() {
+            if (_.isEmpty(this.cup_list) || _.isEmpty(this.cup_matches)) { return [] }
+            let cl = this.cup_list
+            for (let c of cl) {
+                c.match = this.cup_matches.find(i => i.league == c.cup_league)
+            }
+            return cl
         },
         league_name() {
             return ''
@@ -33,6 +39,7 @@ var app = new Vue({
             this.loading = false
             this.taking_screenshot = false
             this.cup_list = undefined
+            this.cup_matches = undefined
             this.team_id = undefined
             this.league_id = undefined
             this.cup_id = undefined
@@ -45,6 +52,7 @@ var app = new Vue({
             fetch_player_info().then((d) => {
                 app.loading = false
                 app.cup_list = d.body.leagues.classic.filter(i => i.has_cup && i.cup_league)
+                app.cup_matches = d.body.leagues.cup_matches
                 $("#cup-modal").modal('show')
             })
         },
@@ -311,7 +319,7 @@ function draw_bracket() {
         .style("fill", "black")
         .style("fill-opacity", "0.5")
         .style("font-size", "6pt")
-        .text("v1.2")
+        .text("v1.4")
 
     signature_theme = {
         'fpl': '#37003c',

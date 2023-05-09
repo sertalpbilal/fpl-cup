@@ -153,7 +153,20 @@
                     <div class="modal-body">
                         <label for="cup-list-select" class="form-label">Select a cup to display</label>
                         <table id="cup-list-select" class="table table-striped text-small">
-                            <tr class="hoverable" v-for="cup in cup_list">
+                            <tr>
+                                <td class="text-center">Status</td>
+                                <td>GW</td>
+                                <td>Name</td>
+                            </tr>
+                            <tr class="hoverable" v-for="cup in combined_cup_info">
+                                <td class="text-center">
+                                    <span style="color:steelblue" v-if="cup?.match != undefined && cup.match.winner == team_id">W</span>
+                                    <span style="color:red" v-if="cup?.match != undefined && cup.match.winner != team_id">L</span>
+                                    <span style="color:peru" v-if="cup?.match == undefined">-</span>
+                                </td>
+                                <td class="text-center">
+                                    {{ cup?.match ? cup.match.event : "" }}
+                                </td>
                                 <td @click="load_cup(cup.id, cup.cup_league)">{{ cup.name }} cup</td>
                             </tr>
                         </table>
@@ -178,6 +191,6 @@
 <script src="https://cdn.jsdelivr.net/npm/d3-scale-chromatic@3.0.0/dist/d3-scale-chromatic.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.1.1/dist/dom-to-image-more.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
-<script src="static/js/main.js?v=1.3"></script>
+<script src="static/js/main.js?v=1.4"></script>
 
 </html>
