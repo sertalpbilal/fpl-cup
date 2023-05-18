@@ -158,16 +158,29 @@
                                 <td>GW</td>
                                 <td>Name</td>
                             </tr>
-                            <tr class="hoverable" v-for="cup in combined_cup_info">
+                            <tr class="hoverable" v-for="cup in _.orderBy(combined_cup_info, 'match.event', 'desc')">
                                 <td class="text-center">
-                                    <span style="color:steelblue" v-if="cup?.match != undefined && cup.match.winner == team_id">W</span>
-                                    <span style="color:red" v-if="cup?.match != undefined && cup.match.winner != team_id">L</span>
-                                    <span style="color:peru" v-if="cup?.match == undefined">-</span>
+                                    <span :style="{'color': cup.status.includes('W') ? 'steelblue' : cup.status.includes('L') ? 'red' : 'peru'}">{{ cup.status }}</span><br />
+                                    <span v-if="cup.status.includes('Live')">
+                                        <span :style="{'fontWeight': team_id == cup.match.entry_1_entry ? 'bold': 'normal'}">{{ cup.match.entry_1_points }}</span>
+                                        <span> - </span>
+                                        <span :style="{'fontWeight': team_id == cup.match.entry_2_entry ? 'bold': 'normal'}">{{ cup.match.entry_2_points }}</span>
+                                    </span>
+                                    <!-- <span v-if="cup?.match != undefined && cup.match.winner == null">
+                                        <span style="color:green">C</span>
+                                    </span>
+                                    <span style="color:steelblue" v-else-if="cup?.match != undefined && cup.match.winner == team_id">W</span>
+                                    <span style="color:red" v-else-if="cup?.match != undefined && cup.match.winner != team_id">L</span>
+                                    <span style="color:peru" v-else-if="cup?.match == undefined">-</span> -->
                                 </td>
                                 <td class="text-center">
                                     {{ cup?.match ? cup.match.event : "" }}
                                 </td>
-                                <td @click="load_cup(cup.id, cup.cup_league)">{{ cup.name }} cup</td>
+                                <td @click="load_cup(cup.id, cup.cup_league)">
+                                    {{ cup.name }} cup
+                                    <span v-if="cup.opp"><br/>{{ cup.opp }}</span>
+                                </td>
+                                
                             </tr>
                         </table>
                     </div>

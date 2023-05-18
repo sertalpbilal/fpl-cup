@@ -26,6 +26,34 @@ var app = new Vue({
             let cl = this.cup_list
             for (let c of cl) {
                 c.match = this.cup_matches.find(i => i.league == c.cup_league)
+                if (c.match) {
+                    c.score = c.match.entry_1_points + ' - ' + c.match.entry_2_points
+                    c.opp = c.match.entry_1_entry == app.team_id ? (c.match.entry_2_name + ' (' + c.match.entry_2_player_name + ')') : (c.match.entry_1_name + ' (' + c.match.entry_1_player_name + ')')
+                    if (c.match.winner == null) {
+                        let my_points = c.match.entry_1_entry == app.team_id ? c.match.entry_1_points : c.match.entry_2_points
+                        let opp_points = c.match.entry_1_entry == app.team_id ? c.match.entry_2_points : c.match.entry_1_points
+                        
+                        if (my_points > opp_points) {
+                            c.status = 'Live - W'
+                        }
+                        else if (my_points < opp_points) {
+                            c.status = 'Live - L'
+                        }
+                        else {
+                            c.status = 'Live'
+                        }
+                    }
+                    else if (c.match.winner == app.team_id) {
+                        c.status = 'W'
+                    }
+                    else {
+                        c.status = 'L'
+                    }
+                }
+                else {
+                    c.status = '-'
+                }
+                
             }
             return cl
         },
