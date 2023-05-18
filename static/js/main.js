@@ -276,6 +276,10 @@ function draw_bracket() {
 
     let raw_width = 1200
     let raw_height = 900
+    debugger
+    if (app.start_gw_override < 34) {
+        raw_height = 1600
+    }
 
     let margin = { top: 0, left: 0,  bottom: 0, right: 0 },
             width = raw_width - margin.left - margin.right,
@@ -428,7 +432,7 @@ function draw_bracket() {
         // .attr("transform", (d,i) => `translate(${x_main(d.event)},${y_cont( (i+1) / (number_of_games[d.event] + 1)) - y_ref.bandwidth()/2})`)
         .attr("transform", (d,i) => `translate(${x_main(d.event)},${y_cont( get_y_pos(d.event, i)) - y_ref.bandwidth()/2})`)
 
-    let text_size = first_gw < 34 ? '5pt' : '8pt'
+    let text_size = first_gw < 34 ? '6pt' : '8pt'
 
     single_box
         .append('rect')
