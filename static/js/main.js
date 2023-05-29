@@ -162,6 +162,10 @@ function draw_bracket() {
     let number_of_teams = _.fromPairs(gw_range.map((i,j) => [i, 2**j]))
     let number_of_games = _.fromPairs(gw_range.map((i,j) => [i, j > 1 ? 2**(j-1) : 1]))
     let is_played = _.fromPairs(gw_range.map(i => [i, (cup_data.results[i]?.results.length || 0) > 0]))
+
+    if (is_played[38]) {
+        is_played[39] = true
+    }
     
     let get_y_pos = (gw, i) => {
         if (gw==39) {
@@ -190,7 +194,14 @@ function draw_bracket() {
     }
 
     let gw_games = (gw) => {
-        if (is_played[gw]) {
+        if (gw == 39 && is_played[38]) {
+            let gm = cup_data.results[38].results[0]
+            let name = gm.winner == gm.entry_1_entry ? gm.entry_1_name : gm.entry_2_name
+            let pname = gm.winner == gm.entry_1_entry ? gm.entry_1_player_name : gm.entry_2_player_name
+            let e = [{...gm, 'cup_winner': cup_data.results[38].results[0].winner, 'winner_name': name, 'winner_player_name': pname, 'event': 39}]
+            return e
+        }
+        else if (is_played[gw]) {
             return cup_data.results[gw].results
         }
         else {
@@ -212,11 +223,14 @@ function draw_bracket() {
     if (last_played_gw == 39) {
         last_played_gw = first_gw
     }
+
+
     let player_order = {}
     let id_cnt = 1
 
     for (let gw of _.range(last_played_gw, first_gw-1, -1)) {
         let games = cup_data.results?.[gw]?.results || []
+
 
         if (gw < last_played_gw) {
             games.forEach((p, i) => {
@@ -276,7 +290,7 @@ function draw_bracket() {
 
     let raw_width = 1200
     let raw_height = 900
-    debugger
+    
     if (app.start_gw_override < 34) {
         raw_height = 1600
     }
@@ -433,6 +447,7 @@ function draw_bracket() {
         .attr("transform", (d,i) => `translate(${x_main(d.event)},${y_cont( get_y_pos(d.event, i)) - y_ref.bandwidth()/2})`)
 
     let text_size = first_gw < 34 ? '6pt' : '8pt'
+    let winner_size = '9pt'
 
     single_box
         .append('rect')
@@ -467,6 +482,7 @@ function draw_bracket() {
         .attr("y2", y_ref.bandwidth());
 
     single_box
+        .filter(d => d.event < 39)
         .append('text')
         .attr("x", 50)
         .attr("y", y_ref.bandwidth()/4)
@@ -482,6 +498,7 @@ function draw_bracket() {
         })
 
     single_box
+        .filter(d => d.event < 39)
         .append('text')
         .attr("x", 50)
         .attr("y", y_ref.bandwidth()*3/4)
@@ -497,6 +514,7 @@ function draw_bracket() {
         })
 
     single_box
+        .filter(d => d.event < 39)
         .append('text')
         .attr("x", 20)
         .attr("y", y_ref.bandwidth()/4)
@@ -508,6 +526,7 @@ function draw_bracket() {
         .text(d => d.entry_1_points)
 
     single_box
+        .filter(d => d.event < 39)
         .filter(d => !d.is_bye)
         .append('text')
         .attr("x", 20)
@@ -519,17 +538,31 @@ function draw_bracket() {
         .style("font-size", text_size)
         .text(d => d.entry_2_points)
 
-    // game order for debug
     single_box
+        .filter(d => d.event == 39)
         .append('text')
-        .attr("x", -5)
+        .attr("x", 20)
         .attr("y", y_ref.bandwidth()/2)
         .attr("text-anchor", "start")
         .attr("alignment-baseline", "middle")
         .attr("dominant-baseline", "middle")
         .style("fill", "white")
-        .style("font-size", "8pt")
-        .text(d => d.game_order)
+        .style("font-size", winner_size)
+        .text(d => '🏆 ' + (app.use_player_names ?  d.winner_player_name : d.winner_name))
+
+
+    // game order for debug
+    // single_box
+    //     .append('text')
+    //     .attr("x", -5)
+    //     .attr("y", y_ref.bandwidth()/2)
+    //     .attr("text-anchor", "start")
+    //     .attr("alignment-baseline", "middle")
+    //     .attr("dominant-baseline", "middle")
+    //     .style("fill", "white")
+    //     .style("font-size", "8pt")
+    //     .text(d => d.game_order)
+
 
     // lines
 
@@ -567,6 +600,14 @@ function draw_bracket() {
                 ])
             }
         }
+    }
+
+    if(last_played_gw == 38) {
+        let e = [
+            {'x': x_main(38) + x_main.bandwidth(), 'y': y_cont( get_y_pos(38, 0))},
+            {'x': x_main(39), 'y': y_cont( get_y_pos(39, 0))}
+        ]
+        line_data.push(e)
     }
 
     let single_arrow = arrow_layer.selectAll().data(line_data).enter()
