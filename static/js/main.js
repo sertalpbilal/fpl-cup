@@ -548,7 +548,7 @@ function draw_bracket() {
         .attr("dominant-baseline", "middle")
         .style("fill", "white")
         .style("font-size", winner_size)
-        .text(d => '🏆 ' + (app.use_player_names ?  d.winner_player_name : d.winner_name))
+        .text(d => '🏆 ' + (app.use_player_names ?  (d?.winner_player_name || '') : (d?.winner_name || '')))
 
 
     // game order for debug
