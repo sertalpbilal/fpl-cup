@@ -664,7 +664,7 @@ async function fetch_player_info(){
     return new Promise((resolve, reject) => {
         $.ajax({
             type: "GET",
-            url: `https://alpscode.com/fpl-fetch/general_info?id=${tid}`,
+            url: `https://fpl-fetch.onrender.com/general_info?id=${tid}`,
             dataType: 'json',
             async: true,
             headers: {
@@ -690,7 +690,7 @@ async function fetch_cup_info(league_id, cup_id){
     return new Promise((resolve, reject) => {
         $.ajax({
             type: "GET",
-            url: `https://alpscode.com/fpl-fetch/cup_info?league_id=${league_id}&cup_id=${cup_id}`,
+            url: `https://fpl-fetch.onrender.com/cup_info?league_id=${league_id}&cup_id=${cup_id}`,
             dataType: 'json',
             async: true,
             headers: {
